@@ -1,15 +1,15 @@
-import * as React from 'react';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import Title from './Title';
+import Title from '../../../components/Title';
+import { Fragment } from 'react';
 
-function preventDefault(event: React.MouseEvent) {
+function preventDefault(event) {
   event.preventDefault();
 }
 
-export default function Deposits() {
+const ComponentDeposits = () => {
   return (
-    <React.Fragment>
+    <Fragment>
       <Title>Recent Deposits</Title>
       <Typography component="p" variant="h4">
         $3,024.00
@@ -22,6 +22,8 @@ export default function Deposits() {
           View balance
         </Link>
       </div>
-    </React.Fragment>
+    </Fragment>
   );
 }
+
+export default ComponentDeposits
