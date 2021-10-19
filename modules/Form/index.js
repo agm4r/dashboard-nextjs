@@ -11,7 +11,7 @@ const useStyles = makeStyles({
     }
 })
 
-const FormComponent = () => {
+const Form = () => {
     const classes = useStyles()
 
     return ( 
@@ -49,4 +49,4 @@ const FormComponent = () => {
      );
 }
  
-export default FormComponent;
+export default Form;

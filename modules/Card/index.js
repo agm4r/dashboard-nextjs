@@ -2,7 +2,7 @@ import { Box } from "@mui/system";
 import CardImage from './CardImage'
 import CardRating from "./CardRating";
 
-const CardComponent = () => {
+const Card = () => {
     return ( 
         <Box>
             <CardImage />
@@ -11,4 +11,4 @@ const CardComponent = () => {
      );
 }
  
-export default CardComponent;
+export default Card;

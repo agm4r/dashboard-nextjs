@@ -1,4 +1,4 @@
-import CardComponent from '../modules/CardComponent'
+import CardComponent from '../modules/Card'
 import Head from 'next/head'
 import { Fragment } from 'react'
 

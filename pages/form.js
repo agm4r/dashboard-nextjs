@@ -1,4 +1,4 @@
-import FormComponent from "../modules/FormComponent"
+import FormComponent from "../modules/Form"
 import Head from 'next/head'
 import { Fragment } from "react";
 
