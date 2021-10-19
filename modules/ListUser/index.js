@@ -1,4 +1,4 @@
-import Box from '@mui/material/box'
+import { Fragment } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -21,7 +21,7 @@ const rows = [
 
 const ListUser = () => {
     return ( 
-       <Box>
+       <Fragment>
            <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
@@ -51,7 +51,7 @@ const ListUser = () => {
                 </TableBody>
             </Table>
             </TableContainer>
-       </Box>
+       </Fragment>
      );
 }
  
