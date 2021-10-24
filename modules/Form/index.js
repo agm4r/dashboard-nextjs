@@ -19,6 +19,9 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import moment from 'moment'
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import FormHelperText from '@mui/material/FormHelperText'
+
+const phoneRegExp = '/^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/'
 
 const validationSchema = yup.object({
   name: yup
@@ -32,6 +35,20 @@ const validationSchema = yup.object({
     .string('Enter your password')
     .min(8, 'Password should be of minimum 8 characters length')
     .required('Password is required'),
+  phone: yup 
+    .string('Enter your phone') 
+    .trim("No whitespace") 
+    .matches(/^(^0)(\d{3,4}?){2}\d{3,4}$/g, "Nomor handphone tidak valid (Contoh valid: 085612341234, 081212341234).") 
+    .required("Phone is required"),
+  gender: yup
+    .string()
+    .required(),
+  birth: yup
+    .string()
+    .required(),
+  education: yup
+    .string()
+    .required()
 })
 
 const useStyles = makeStyles({
@@ -46,38 +63,44 @@ const Form = () => {
 const classes = useStyles()
 
 const [value, setValue] = useState({
-  name: "",
-  email: "",
-  password: "",
-  phoneNumber: "",
-  gender: "",
-  birth: "",
-  education: ""
+  name: '',
+  email: '',
+  password: '',
+  phone: '',
+  gender: '',
+  birth: '',
+  education: ''
 });
 
 const handleChange = (event) => {
   console.log(event.target.value)
   setValue({...value, [event.target.name]: event.target.value})
+  console.log(value)
   
 }
 
 const onSubmit = (event) => {
   event.preventDefault()
   console.table(value)
-
-  alert(JSON.stringify(value))
 }
 
 const formik = useFormik({
   initialValues: {
-    name: '',
-    email: '',
-    password: '',
+    name: value.name,
+    email: value.email,
+    password: value.password,
+    phone: value.phone,
+    gender: value.gender,
+    birth: value.birth || null,
+    education: value.education
   },
   validationSchema: validationSchema,
   onSubmit: (values) => {
     alert(JSON.stringify(values, null, 2))
-  }
+    console.log(values)
+  },
+  validateOnChange: true,
+  validateOnBlur: true
 })  
 
 return ( 
@@ -90,7 +113,7 @@ return (
         Sign Up
     </Typography>
 
-    <form noValidate autoComplete="off" onSubmit={formik.handleSubmit && onSubmit}>   
+    <form noValidate autoComplete="off" onSubmit={formik.handleSubmit}>   
       <Grid container spacing={2} >
         <Grid item xs={12}>
           <TextField 
@@ -136,23 +159,44 @@ return (
         </Grid>
         <Grid item xs={12}>
           <TextField 
-            id="phoneNumber"
-            name="phoneNumber"
-            label="Phone Number"
-            onChange={handleChange}
-            variant="standard"
-            type="number"
-            placeholder="123-45-678" 
-            required
+            id="phone"
+            name="phone"
+            label="phone"
+            type="text"
+            value={formik.values.phone}
+            onChange={formik.handleChange}
+            error={formik.touched.phone && Boolean(formik.errors.phone)}
+            helperText={formik.touched.phone && formik.errors.phone}
+            variant="standard" 
           />
         </Grid>
+        {/* <Grid item xs={12}>
+          <TextField 
+            id="phone"
+            name="phone"
+            label="Phone"
+            type="text"
+            variant="standard"
+            value={formik.values.phone}
+            onChange={formik.handleChange}
+            error={formik.touched.phone && Boolean(formik.errors.phone)}
+            // error={console.log(formik.errors)}
+            helpertext={formik.touched.phone && formik.errors.phone}
+          />
+        </Grid> */}
         <Grid item xs={12}>
           <FormLabel>Gender</FormLabel>
-          <RadioGroup row aria-label="gender" name="gender" onChange={handleChange}>
+          <RadioGroup 
+            row aria-label="gender" 
+            id="gender"
+            name="gender" 
+            onChange={formik.handleChange}
+          >
             <FormControlLabel value="male" control={<Radio />} label="Male" />
             <FormControlLabel value="female" control={<Radio />} label="Female" />
             <FormControlLabel value="other" control={<Radio />} label="Other" />
           </RadioGroup>
+          <FormHelperText error={formik.touched.gender && Boolean(formik.errors.gender)}>{formik.touched.gender && formik.errors.gender}</FormHelperText>
         </Grid>
         <Grid item xs={12}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -160,14 +204,16 @@ return (
             id="birth"
             name="birth" 
             label="Birth Date"
-            value={value.birth}
+            value={formik.values.birth}
             onChange={(newValue) => {
               const formatDate = moment(newValue).format('YYYY-MM-DD')
-              console.log(moment(newValue).format('YYYY-MM-DD'))
-              setValue({...value, 'birth': formatDate})
+              console.log(formatDate)
+              formik.setFieldValue('birth', formatDate)
+              console.log(formik.values.birth)
             }}
             renderInput={(params) => <TextField {...params} />}
           />
+          <FormHelperText error={formik.touched.birth && Boolean(formik.errors.birth)}>{formik.touched.birth && formik.errors.birth}</FormHelperText>
           </LocalizationProvider>
         </Grid>
         <Grid item xs={12}>
@@ -176,11 +222,13 @@ return (
             id="education"
             name="education"
             label="Education" 
-            onChange={(event, values) => setValue({...value, 'education': values.id})} 
+            value={formik.values.education}
+            onChange={(event, values) => formik.setFieldValue('education', values.id)} 
             options={pendidikan}
             sx={{ width: 200 }}
             renderInput={(params) => <TextField  {...params} label="Education" />}
           />
+          <FormHelperText error={formik.touched.education && Boolean(formik.errors.education)}>{formik.touched.education && formik.errors.education}</FormHelperText>
         </Grid>
         <Grid item xs={12}>
         <Button
