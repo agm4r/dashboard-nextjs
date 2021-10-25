@@ -222,7 +222,8 @@ return (
             id="education"
             name="education"
             label="Education" 
-            value={formik.values.education}
+            key={formik.values.id}
+            value={formik.values.education.label}
             onChange={(event, values) => formik.setFieldValue('education', values.id)} 
             options={pendidikan}
             sx={{ width: 200 }}
